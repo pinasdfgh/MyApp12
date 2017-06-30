@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    
+    var anim:UIDynamicAnimator?
     @IBOutlet weak var img1: UIImageView!
     @IBOutlet weak var img2: UIImageView!
     @IBOutlet weak var img3: UIImageView!
@@ -71,18 +71,45 @@ class ViewController: UIViewController {
             })
         })
     }
-    
+    var boolddd = true
     @IBAction func btn6(_ sender: Any) {
-        let anim = UIDynamicAnimator(referenceView: self.view)
-        let beh = UIGravityBehavior(items: [img2 , img3])
-        beh.gravityDirection = CGVector(dx: 0, dy: 1)
-        print(beh.gravityDirection)
-        anim.addBehavior(beh)
         
+        //UIDynamicAnimator referenceView是作用在self.view所以要定為全局變數
+        
+        let beh = UIGravityBehavior(items: [img2 , img3])
+        if boolddd {
+            beh.gravityDirection = CGVector(dx: 0.3, dy: 1)
+            boolddd = !boolddd
+        }else{
+            beh.gravityDirection = CGVector(dx: -0.3, dy: -1)
+            boolddd = !boolddd
+        }
+        
+        
+        let beh2 = UICollisionBehavior(items: [img2 , img3])
+        beh2.translatesReferenceBoundsIntoBoundary = true
+        
+        
+        
+        print(beh.gravityDirection)
+        anim!.addBehavior(beh)
+        anim!.addBehavior(beh2)
     }
+    
+    @IBAction func btn7(_ sender: Any) {
+        let beh = UIPushBehavior(items: [img2], mode: .continuous)
+        beh.magnitude = 2.0  //unit 1000 point/S^2
+        beh.angle = 45.0 / 180.0 * CGFloat(Double.pi)
+        
+        anim?.addBehavior(beh)
+    }
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        anim = UIDynamicAnimator(referenceView: self.view)
     }
 
     override func didReceiveMemoryWarning() {
